@@ -1,10 +1,11 @@
 import React, {Fragment} from 'react';
+import Items from './components/Items'
 
 import axios from 'axios';
 
 class App extends React.Component {
     state = {
-        apiResponse:[],
+        todoItems:[],
         title: '',
         description: '',
         pagination: 1,
@@ -30,24 +31,24 @@ class App extends React.Component {
         axios.delete('http://localhost:8000/api/todos/' + this.deleteValue );
     }*/
 
-    handleClick(e) {
+    /*handleClick(e) {
         this.setState({
             deleteValue: e.currentTarget.dataset.id
         });
         console.log(this.deleteValue)
-    }
+    }*/
 
 
     componentDidMount = () => {
         axios.get('http://localhost:8000/api/todos?page=' + this.state.pagination)
             .then(response => {
-                this.setState( { apiResponse: response.data } )
+                this.setState( { todoItems: response.data } )
             })
             .catch(error => {
                 console.log(error);
             });
 
-        this.handleClick = this.handleClick.bind(this);
+        /*this.handleClick = this.handleClick.bind(this);*/
         this.handleChangeTitle = this.handleChangeTitle.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -82,19 +83,8 @@ class App extends React.Component {
                         </thead>
                         <tbody>
                             {
-                                this.state.apiResponse.map(apiResponse =>(
-                                    <tr key={apiResponse.id}>
-                                            <th scope="row">{apiResponse.id}</th>
-                                            <td>{apiResponse.title}</td>
-                                            <td>{apiResponse.description}</td>
-                                            <td>
-                                                <a className="btn btn-outline-danger"
-                                                   data-id={apiResponse.id}
-                                                   onClick={this.handleClick}>
-                                                    Supprimer
-                                                </a>
-                                            </td>
-                                    </tr>
+                                this.state.todoItems.map(res =>(
+                                    <Items key={res.id} index={res.id} title={res.title} description={res.description}/>
                                 ))
                             }
                         </tbody>
